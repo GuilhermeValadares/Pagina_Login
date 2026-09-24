@@ -1,9 +1,7 @@
 type PropsErrorMessageCard = {
-    title: string;
-}
+  title: string;
+};
 
-export function ErrorMessageCard({title}: PropsErrorMessageCard) {
-    return (
-        <div className='error-message'>{ title }</div>
-    )
+export function ErrorMessageCard({ title }: PropsErrorMessageCard) {
+  return <div className="error-message">{title}</div>;
 }

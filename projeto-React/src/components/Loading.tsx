@@ -2,13 +2,9 @@
 // o código é reutilizavel
 
 type PropsLoading = {
-    isLoading: boolean
-}
+  isLoading: boolean;
+};
 
-export function Loading({isLoading}: PropsLoading) {
-    return (
-        <div>
-            {isLoading && <h1>Carregando...</h1>}
-        </div>
-    )
+export function Loading({ isLoading }: PropsLoading) {
+  return <div>{isLoading && <h1>Carregando...</h1>}</div>;
 }
