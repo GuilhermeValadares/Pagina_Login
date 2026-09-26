@@ -4,13 +4,45 @@ import { SingUpIcon } from './Components/SingUpIcon';
 import { ErrorMessageCard } from '../../../components/ErrorMessageCard';
 import { AuthFooter } from '../../../components/AuthFooter';
 import { FormGroup } from '../../../components/FormGroup';
+import { useState } from 'react';
+import type { User } from '../../../types/User';
 
-export function SingUpPage() {
-  const isError = false;
+type PropsSingUpPage = {
+  handleGoSignIn: () => void;
+  onRegister: (user: User) => void;
+  users: User[];
+};
+
+export function SingUpPage({ handleGoSignIn, onRegister, users }: PropsSingUpPage) {
+  const [error, setError] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [name, setName] = useState('');
 
   function handleSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
-    console.log('form sing-up');
+    setError('');
+
+    if (!name || !email || !password || !confirmPassword) {
+      return setError('Preencha todos os dados!');
+    }
+
+    if (password !== confirmPassword) {
+      return setError('A senha de confirmação está incorreta');
+    }
+
+    if (users.some((user) => user.email === email)) {
+      return setError('Este email já está cadastrado');
+    }
+
+    const newUser: User = {
+      name,
+      email,
+      password,
+    };
+
+    onRegister(newUser);
   }
 
   return (
@@ -18,23 +50,33 @@ export function SingUpPage() {
       <div className="card">
         <HeaderAuth title="Criar Conta" subtitle="Preencha os dados" Icon={<SingUpIcon />} />
 
-        {isError && <ErrorMessageCard title="Email ou senha inválidos." />}
+        {error && <ErrorMessageCard title={error} />}
 
         <form onSubmit={handleSubmit}>
-          <FormGroup label="Nome" imputVariant="text" />
+          <FormGroup label="Nome" imputVariant="text" value={name} setValue={setName} />
 
-          <FormGroup label="email" imputVariant="email" />
+          <FormGroup label="email" imputVariant="email" value={email} setValue={setEmail} />
 
-          <FormGroup label="Senha" imputVariant="password" />
+          <FormGroup
+            label="Senha"
+            imputVariant="password"
+            value={password}
+            setValue={setPassword}
+          />
 
-          <FormGroup label="Senha" imputVariant="passwordAgain" />
+          <FormGroup
+            label="Confirmar senha"
+            imputVariant="passwordAgain"
+            value={confirmPassword}
+            setValue={setConfirmPassword}
+          />
 
           <button type="submit" className="button button-singup">
             Cadastrar
           </button>
         </form>
 
-        <AuthFooter title="Já tem uma conta?" lableLink="entrar" />
+        <AuthFooter title="Já tem uma conta?" lableLink="entrar" onRedirect={handleGoSignIn} />
       </div>
     </div>
   );

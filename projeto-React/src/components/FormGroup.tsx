@@ -2,9 +2,11 @@ type PropsFormGroup = {
   label: string;
   imputVariant: 'email' | 'password' | 'passwordAgain' | 'text';
   placeholder?: string;
+  value: string;
+  setValue: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export function FormGroup({ label, imputVariant, placeholder }: PropsFormGroup) {
+export function FormGroup({ label, imputVariant, placeholder, value, setValue }: PropsFormGroup) {
   const PropsImput = {
     email: {
       type: 'email',
@@ -15,7 +17,7 @@ export function FormGroup({ label, imputVariant, placeholder }: PropsFormGroup) 
       placeholder: 'Digite sua senha',
     },
     passwordAgain: {
-      type: 'passwordAgain',
+      type: 'password',
       placeholder: 'Digite sua senha novamente',
     },
     text: {
@@ -28,6 +30,8 @@ export function FormGroup({ label, imputVariant, placeholder }: PropsFormGroup) 
     <div className="form-group">
       <label className="form-label">{label}</label>
       <input
+        value={value}
+        onChange={(event) => setValue(event.target.value)}
         type={PropsImput[imputVariant].type}
         className="form-input"
         placeholder={placeholder || PropsImput[imputVariant].placeholder}
